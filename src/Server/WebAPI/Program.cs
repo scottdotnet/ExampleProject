@@ -19,9 +19,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+// Wouldn't typically do this, would use a migration bundle to control exactly when database migrations occur
+{
+    using var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-await context.Database.MigrateAsync();
+    await context.Database.MigrateAsync();
+}
 
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
