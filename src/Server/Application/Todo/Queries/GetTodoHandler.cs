@@ -15,14 +15,14 @@ internal sealed class GetTodoHandler : IRequestHandler<TodoQueries.GetTodo, Todo
 
     public async ValueTask<TodoDto> Handle(TodoQueries.GetTodo request, CancellationToken cancellationToken)
     {
-        var todo = await _context.Todos.Select(x => new TodoDto
-        {
-            Id = x.Id,
-            Title = x.Title,
-            Description = x.Description,
-            Completed = x.Completed
-        }).SingleAsync(x => x.Id == request.Id);
+        var todo = await _context.Todos.SingleAsync(x => x.Id == request.Id);
 
-        return todo;
+        return new()
+        {
+            Id = todo.Id,
+            Title = todo.Title,
+            Description = todo.Description,
+            Completed = todo.Completed
+        };
     }
 }
