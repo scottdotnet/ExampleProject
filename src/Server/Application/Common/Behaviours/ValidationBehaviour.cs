@@ -1,10 +1,5 @@
 ﻿using FluentValidation;
 using Mediator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ValidationException = ExampleProject.Shared.Common.Exceptions.ValidationException;
 
 namespace ExampleProject.Server.Application.Common.Behaviours;

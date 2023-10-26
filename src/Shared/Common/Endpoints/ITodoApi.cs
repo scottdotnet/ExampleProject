@@ -1,11 +1,6 @@
 ﻿using ExampleProject.Shared.Todo;
 using ExampleProject.Shared.Todo.Models;
 using Refit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExampleProject.Shared.Common.Endpoints;
 

@@ -1,7 +1,6 @@
 ﻿using ExampleProject.Shared.Common.Endpoints;
 using ExampleProject.Shared.Todo;
 using ExampleProject.Shared.Todo.Models;
-using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExampleProject.Server.WebAPI.Controllers;

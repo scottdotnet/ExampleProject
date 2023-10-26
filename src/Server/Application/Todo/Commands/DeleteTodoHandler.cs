@@ -2,11 +2,6 @@
 using ExampleProject.Shared.Todo;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExampleProject.Server.Application.Todo.Commands;
 
