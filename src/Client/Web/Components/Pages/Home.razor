@@ -1,0 +1,65 @@
+﻿@page "/"
+@using ExampleProject.Shared.Common.Endpoints
+@using ExampleProject.Shared.Todo.Models
+
+@inject ITodoApi TodoApi
+
+<PageTitle>Home</PageTitle>
+
+Todos:
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Completed</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var todo in todos)
+        {
+            <tr>
+                <td>@todo.Title</td>
+                <td>@todo.Description</td>
+                <td><input type="checkbox" value="@todo.Completed" @onchange=@(e => ToggleCompleted(todo, e)) /></td>
+                <td><button @onclick=@(() => Delete(todo.Id))>Delete</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button @onclick=Refresh>Refresh</button>
+
+@code {
+    List<TodoDto> todos = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Refresh();
+        }
+    }
+
+    async Task Refresh()
+    {
+        todos = await TodoApi.GetTodos(new());
+    }
+
+    async Task ToggleCompleted(TodoDto todo, ChangeEventArgs e)
+    {
+        todo.Completed = (bool)e.Value;
+
+        await TodoApi.UpdateTodo(new(todo), new());
+
+        await Refresh();
+    }
+
+    async Task Delete(int id)
+    {
+        await TodoApi.DeleteTodo(new(id), new());
+
+        await Refresh();
+    }
+}
