@@ -19,7 +19,7 @@ internal sealed class UnhandledExceptionBehaviour<TMessage, TResponse> : IPipeli
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unhandled exception for request {Name} {@Reques}", typeof(TMessage).Name, message);
+            _logger.LogError(ex, "Unhandled exception for request {Name} {@Request}", typeof(TMessage).Name, message);
 
             throw;
         }
