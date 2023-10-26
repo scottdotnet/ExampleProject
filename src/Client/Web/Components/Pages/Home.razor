@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Blazored.FluentValidation
 @using ExampleProject.Shared.Common.Endpoints
 @using ExampleProject.Shared.Todo.Models
 
@@ -6,33 +7,65 @@
 
 <PageTitle>Home</PageTitle>
 
-Todos:
+<div class="container">
+    <h1>To-Do List</h1>
+    <div class="form-container">
+        <EditForm Model=newTodo OnValidSubmit=CreateTodo>
+            <FluentValidationValidator />
 
-<table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Completed</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var todo in todos)
-        {
+            <label>Title: </label>
+            <InputText @bind-Value=newTodo.Title />
+            <ValidationMessage For=@(() => newTodo.Title) /><br>
+
+            <label>Description: </label>
+            <InputText @bind-Value=newTodo.Description />
+            <ValidationMessage For=@(() => newTodo.Description) /><br>
+
+            <label>Completed: </label>
+            <InputCheckbox @bind-Value=newTodo.Completed />
+            <ValidationMessage For=@(() => newTodo.Completed) /><br>
+
+            <div class="action-buttons">
+                <button type="submit">Save</button>
+                <button type="button" @onclick=@(() => newTodo = new())>Clear</button>
+            </div>
+        </EditForm>
+    </div>
+
+    <table>
+        <thead>
             <tr>
-                <td>@todo.Title</td>
-                <td>@todo.Description</td>
-                <td><input type="checkbox" value="@todo.Completed" @onchange=@(e => ToggleCompleted(todo, e)) /></td>
-                <td><button @onclick=@(() => Delete(todo.Id))>Delete</button></td>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Completed</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody id="todo-list">
+            @foreach (var todo in todos)
+            {
+                <tr>
+                    <td>@todo.Title</td>
+                    <td>@todo.Description</td>
+                    <td><input type="checkbox" checked=@todo.Completed @onchange=@(e => ToggleCompleted(todo, e))></td>
+                    <td>
+                        <button type="button" class="delete-button" @onclick=@(() => Delete(todo.Id))>Delete</button>
+                    </td>
+                </tr>
 
-<button @onclick=Refresh>Refresh</button>
+            }
+        </tbody>
+    </table>
+
+    <div class="refresh-button">
+        <button type="button" @onclick=Refresh>Refresh List</button>
+    </div>
+</div>
 
 @code {
     List<TodoDto> todos = new();
+
+    TodoDto newTodo = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -45,6 +78,8 @@ Todos:
     async Task Refresh()
     {
         todos = await TodoApi.GetTodos(new());
+
+        await InvokeAsync(StateHasChanged);
     }
 
     async Task ToggleCompleted(TodoDto todo, ChangeEventArgs e)
@@ -61,5 +96,14 @@ Todos:
         await TodoApi.DeleteTodo(new(id), new());
 
         await Refresh();
+    }
+
+    async Task CreateTodo()
+    {
+        await TodoApi.CreateTodo(new(newTodo), new());
+
+        await Refresh();
+
+        newTodo = new();
     }
 }

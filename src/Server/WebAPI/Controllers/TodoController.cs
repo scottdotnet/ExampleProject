@@ -11,8 +11,8 @@ public sealed class TodoController : ApiControllerBase, ITodoApi
     public async Task<bool> CreateTodo(TodoCommands.CreateTodo request, CancellationToken cancellationToken)
         => await Mediator.Send(request, cancellationToken);
 
-    [HttpDelete]
-    public async Task<bool> DeleteTodo(TodoCommands.DeleteTodo request, CancellationToken cancellationToken)
+    [HttpDelete("{Id}")]
+    public async Task<bool> DeleteTodo([FromRoute] TodoCommands.DeleteTodo request, CancellationToken cancellationToken)
         => await Mediator.Send(request, cancellationToken);
 
     [HttpGet("{Id}")]

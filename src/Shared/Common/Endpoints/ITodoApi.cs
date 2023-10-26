@@ -18,6 +18,6 @@ public interface ITodoApi
     [Put("/Todo")]
     Task<bool> UpdateTodo(TodoCommands.UpdateTodo request, CancellationToken cancellationToken);
 
-    [Delete("/Todo")]
+    [Delete("/Todo/{request.Id}")]
     Task<bool> DeleteTodo(TodoCommands.DeleteTodo request, CancellationToken cancellationToken);
 }

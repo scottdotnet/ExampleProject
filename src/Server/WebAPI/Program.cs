@@ -23,7 +23,7 @@ using var context = app.Services.CreateScope().ServiceProvider.GetRequiredServic
 
 await context.Database.MigrateAsync();
 
-app.UseCors(x => x.AllowAnyOrigin());
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseHttpsRedirection();
 
